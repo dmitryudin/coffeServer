@@ -43,54 +43,23 @@ def updateCoffeHouse():
     coffeHouseObject.description = jsonData['description']
     coffeHouseObject.address = jsonData['address']
     newlist = jsonData['photos']
-    print('newlist', newlist)
-
+    # TODO возможно стоит обрабатывать как можества
     oldlist = list(map(lambda x: x.filename, coffeHouseObject.photos))
-
     for photo in oldlist:
         if not (app.config['MEDIA_SERVER_ADDRESS']+'/'+photo in newlist):
             path = '/var/www/html/'+str(photo).split('/')[-1]
             if os.path.exists(path):
                 os.remove(path)
-
     for photo in coffeHouseObject.photos:
         print('deleted', photo.filename)
         db.session.delete(photo)
-
     for photo in newlist:
         photosObject = model.Photo()
         photosObject.coffehouse_id = coffeHouseObject.id
         photosObject.filename = photo.split('/')[-1]
         db.session.add(photosObject)
         print('ph-', photosObject.filename)
-
     db.session.add(coffeHouseObject)
     db.session.commit()
 
     return ''
-
-
-def buildRandomString(size):
-    return ''.join(random.choice(string.ascii_letters) for _ in range(size))
-
-
-@app.route('/coffehouse/delete_file', methods=['POST'])
-def deleteFile():
-    print('endpoint')
-    recvData = request.get_data().decode('utf-8')
-    jsonData = json.loads(recvData)
-    os.remove('/var/www/html/'+jsonData['url'].split('/')[-1])
-    return '{"status":"ok"}'
-
-
-@app.route('/coffehouse/upload_file', methods=['POST'])
-def uploadFile():
-    '''
-    пишет изображение в файл и возвращает его url
-    '''
-    uploadedFile = request.files['image']
-    filename = buildRandomString(30)+'.png'
-
-    uploadedFile.save('/var/www/html/'+filename)
-
-    return app.config['MEDIA_SERVER_ADDRESS']+'/'+filename

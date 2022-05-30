@@ -1,6 +1,6 @@
 {
-    "name": "coffe_admin",
-    "short_name": "coffe_admin",
+    "name": "canban",
+    "short_name": "canban",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
