@@ -4,4 +4,4 @@ from app import CoffeHouseController
 
 db.create_all()
 
-# CoffeHouseController.create_coffe_house()
+CoffeHouseController.create_coffe_house()

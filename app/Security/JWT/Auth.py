@@ -67,8 +67,10 @@ def create_user(login: str, password: str, role: str, real_id: int):
 @app.route('/security/auth', methods=['GET'])
 @cross_origin()
 def auth():
+    
     auth = Auth.query.filter_by(
         login=request.authorization.username).first()
+    print('login', auth.id)
     if auth == None:
         return {'status': 'user is not exist'}, 404
     if auth != None:
@@ -78,7 +80,7 @@ def auth():
             refresh_token = create_refresh_token(auth.id)
             print(refresh_token)
             return (jsonify({
-                'id': auth.id,
+                'id': auth.real_id,
                 'lifetime': app.config['TOKENS_LIFETIME'],
                 'access_token': access_token,
                 'refresh_token': refresh_token
@@ -91,4 +93,5 @@ def auth():
 def refreshAccessToken():
     current_user = get_jwt_identity()
     new_token = create_access_token(identity=current_user, fresh=False)
+    print('token refresed')
     return {'access_token': new_token}, 200

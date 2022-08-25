@@ -14,4 +14,4 @@ jwt = JWTManager(app)
 
 
 #app.run(debug=True, host='2.59.41.249', port=5050)
-socketio.run(app, debug=True, host='2.59.41.249', port=5050, )
+socketio.run(app, debug=True, host='185.119.58.234', port=5050, )

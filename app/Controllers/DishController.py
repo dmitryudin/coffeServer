@@ -6,14 +6,14 @@ import json
 from flask import request
 from flask import jsonify
 from app.Models.Coffe_house_model import Coffehouse
-from app.Models.Coffe_model import Coffe
+from app.Models.Dish_model import Dish
 from app.Models.Other import Photo
 from flask_cors import cross_origin
 
 
-@app.route('/controller/coffes', methods=['GET'])
+@app.route('/controllers/coffes', methods=['GET'])
 @cross_origin()
-def get_coffes():
+def get_dishes():
     ''' 
     если url в базе данных не соответсвует переданному, то
     изображение на сервере удаляется, если вместо url передаётся base64 строка,
@@ -21,17 +21,18 @@ def get_coffes():
     '''
     #d = json.loads(request.get_data().decode('utf-8'))
     coffeHouse = Coffehouse.query.get(int(1))
-    coffes = coffeHouse.coffes.all()
+    dishes = coffeHouse.dishes.all()
 
-    data = list(map(lambda coffe: coffe.toDict(), coffes))
+    data = list(map(lambda dish: dish.toDict(), dishes))
+    
     data = (jsonify(data))
     # TODO нужно реализовать этот контроллер всё-таки
     return data
 
 
-@app.route('/controller/coffe', methods=['POST'])
+@app.route('/controllers/coffe', methods=['POST'])
 @cross_origin()
-def coffe_create():
+def dish_create():
     '''
     получает на вход массив с url изображений
     если url в базе данных не соответсвует переданному, то
@@ -39,38 +40,43 @@ def coffe_create():
     то создаётся новое изображение. Метод возвращает новый массив c url картинок
     '''
     d = json.loads(request.get_data().decode('utf-8'))
+    
+    
     # if d['picture'] == '' or d['name'] == '':
     if d['name'] == '':
         return {}, 500
     coffeHouse = Coffehouse.query.get(1)
-    coffes = (coffeHouse.coffes)
-    coffe = Coffe()
-    coffe.name = d['name']
+    dishes = (coffeHouse.dishes)
+    dish= Dish()
+    dish.name = d['name']
     photo = Photo()
     if d['picture']:
         photo.filename = d['picture'].split('/')[-1]
-    coffe.photo = [photo]
-    coffe.category = d['category']
-    coffe.description = d['description']
-    coffe.suppliments = str(d['properties'])
-    coffe.volumes = str(d['priceOfVolume'])
-    coffes.append(coffe)
-    coffeHouse.coffes = coffes
+    dish.picture = [photo]
+    dish.category = d['category']
+    dish.subcategory = d['subcategory']
+    dish.description = d['description']
+    dish.weight = d['weight']
+    dish.base_price = d['base_price']
+    dish.field_selection = str(d['field_selection'])
+    dish.options = str(d['options'])
+    dishes.append(dish)
+    coffeHouse.dishes = dishes
     db.session.add(coffeHouse)
     db.session.commit()
-    # TODO нужно реализовать этот контроллер всё-таки
     return '{"status:":"ok"}', 204
 
 
-@app.route('/controller/coffe', methods=['DELETE'])
+@app.route('/controllers/coffe', methods=['DELETE'])
 @cross_origin()
 def delete_coffe():
     d = json.loads(request.get_data().decode('utf-8'))
-    coffe = Coffe.query.get(int(d['id']))
-    path = '/var/www/html/'+str(coffe.photo[-1].filename).split('/')[-1]
+    print(d)
+    dish = Dish.query.get(d['id'])
+    path = '/var/www/html/'+str(dish.picture.first().filename).split('/')[-1]
     if os.path.exists(path):
         os.remove(path)
         print('file', path, 'is removed')
-    db.session.delete(coffe)
+    db.session.delete(dish)
     db.session.commit()
-    return 'Hello World!'
+    return {'status':'ok'}

@@ -12,8 +12,8 @@ import os
 from flask_cors import cross_origin
 
 
-@app.route('/controllers/coffehouse', methods=['POST'])
-@cross_origin()
+#@app.route('/controllers/coffehouse', methods=['POST'])
+#@cross_origin()
 def create_coffe_house():
     coffeHouseObject = Coffehouse()
     coffeHouseObject.name = '#thefir'
@@ -30,6 +30,7 @@ def create_coffe_house():
 def get_coffe_house():
     coffeHouseObject = Coffehouse.query.get(1)
     data = coffeHouseObject.toJson()
+    
     return data, 200
 
 

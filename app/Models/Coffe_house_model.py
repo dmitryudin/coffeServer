@@ -19,8 +19,8 @@ class Coffehouse(db.Model):
                              cascade="all,delete,delete-orphan", lazy='dynamic')
     orders = db.relationship(
         'app.Models.Order_model.Order', backref='coffehouse', lazy='dynamic')
-    coffes = db.relationship(
-        'app.Models.Coffe_model.Coffe', backref='coffehouse', lazy='dynamic')
+    dishes = db.relationship(
+        'app.Models.Dish_model.Dish', backref='coffehouse', lazy='dynamic')
 
     def toJson(self):
         fieldsOfClass = list(filter(lambda x: x.find('_') == -1, dir(self)))
@@ -28,7 +28,7 @@ class Coffehouse(db.Model):
         for el in fieldsOfClass:
             if el == 'metadata' or el == 'toJson' or el == 'fromJson' or el == 'query' or el == 'passwordHash' or el == 'registry':
                 continue
-            if el == 'orders' or el == 'coffes':
+            if el == 'orders' or el == 'dishes':
                 continue
             if el == 'photos':
                 myDict[el] = (list(
@@ -46,7 +46,7 @@ class Coffehouse(db.Model):
         self.phone = jsonString['phone']
         self.email = jsonString['email']
         self.description = jsonString['description']
-        self.address = jsonString['address']
+       # self.address = jsonString['address']
         newlist = jsonString['photos']
         # TODO возможно стоит обрабатывать как можества
         oldlist = list(map(lambda x: x.filename, self.photos))
@@ -54,6 +54,7 @@ class Coffehouse(db.Model):
             if not (app.config['MEDIA_SERVER_ADDRESS']+'/'+photo in newlist):
                 path = '/var/www/html/'+str(photo).split('/')[-1]
                 if os.path.exists(path):
+                    print('removed', path)
                     os.remove(path)
         for photo in self.photos:
             db.session.delete(photo)

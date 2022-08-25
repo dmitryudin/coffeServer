@@ -20,6 +20,7 @@ def deleteFile():
     recvData = request.get_data().decode('utf-8')
     jsonData = json.loads(recvData)
     os.remove('/var/www/html/'+jsonData['url'].split('/')[-1])
+    print('deleted', jsonData['url'])
     return '{"status":"ok"}'
 
 
@@ -32,5 +33,5 @@ def uploadFile():
     filename = buildRandomString(30)+'.png'
 
     uploadedFile.save('/var/www/html/'+filename)
-
+    
     return app.config['MEDIA_SERVER_ADDRESS']+'/'+filename

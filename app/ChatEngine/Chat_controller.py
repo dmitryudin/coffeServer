@@ -5,7 +5,7 @@ from flask_jwt_extended import (
 from flask import request
 from flask_socketio import send, emit
 
-
+'''
 @socketio.on('connect')
 @jwt_required()
 def handle_connect():
@@ -31,3 +31,4 @@ def handle_message(data):
 @socketio.on('leave')
 def on_leave(data):
     pass
+'''

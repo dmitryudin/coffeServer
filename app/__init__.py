@@ -11,8 +11,8 @@ db = SQLAlchemy(app)
 
 socketio = SocketIO(app)
 #from app.Security.JWT import Auth
-from app.Controllers import ClientController, CoffeController, CoffeHouseController, OrderController, RemoteFileManager
-from app.Models import Client_model, Coffe_house_model, Coffe_model, Order_model, Other
+from app.Controllers import ClientController, DishController, CoffeHouseController, OrderController, RemoteFileManager
+from app.Models import Client_model, Coffe_house_model, Dish_model, Order_model, Other
 from app.ChatEngine import Chat_model
 from app.Security.JWT import Auth
 from app.Security import FormValidator
