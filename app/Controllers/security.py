@@ -13,7 +13,6 @@ def sendImageToMediaServer(data):
     addr = app.config['MEDIA_SERVER_ADDRESS']
     r = requests.post(addr+"/create_image",
                       data='{"base64":"' + str(data)+'"}')
-    print(r.json()['name'])
 
     return (r.json()['name'])
 
@@ -21,7 +20,6 @@ def sendImageToMediaServer(data):
 def remImageFromMediaServer(name):
     addr = app.config['MEDIA_SERVER_ADDRESS']
     r = requests.post(addr+"/delete_image", data='{"url":"' + str(name)+'"}')
-    print(*r)
 
 
 def generateToken(power):

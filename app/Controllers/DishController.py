@@ -71,12 +71,10 @@ def dish_create():
 @cross_origin()
 def delete_coffe():
     d = json.loads(request.get_data().decode('utf-8'))
-    print(d)
     dish = Dish.query.get(d['id'])
     path = '/var/www/html/'+str(dish.picture.first().filename).split('/')[-1]
     if os.path.exists(path):
         os.remove(path)
-        print('file', path, 'is removed')
     db.session.delete(dish)
     db.session.commit()
     return {'status':'ok'}

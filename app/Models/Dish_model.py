@@ -30,5 +30,4 @@ class Dish(db.Model):
         myDict['options'] =eval(self.options)
         myDict['field_selection'] = eval(self.field_selection)
         myDict['picture'] = app.config['MEDIA_SERVER_ADDRESS']+'/'+str(self.picture.first().filename)
-        print(myDict)
         return myDict

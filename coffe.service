@@ -1,0 +1,11 @@
+[Unit]
+Description=Flask Server
+After=network.target
+[Service]
+Type=oneshot
+User=root
+ExecStart=/root/coffeServer/start.sh
+[Install]
+WantedBy=multi-user.target
+
+

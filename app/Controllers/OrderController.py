@@ -113,9 +113,7 @@ def delete_order():
 def create_order():
     d = json.loads(request.get_data().decode('utf-8'))
     userId = Auth.Auth.query.get(get_jwt_identity()).real_id
-    print('auth', userId)
     order = Order()
-    print(d)
     order.user_id = userId
     order.id_payment = d['id_payment']
     order.total_cost = d['total_cost']
@@ -133,7 +131,6 @@ def create_order():
         socketio.emit('message', 'dsfasdfasf', room=clients[-1])
     except: 
         pass
-    print('created order')
     return {"order_id":order.id}
 
 

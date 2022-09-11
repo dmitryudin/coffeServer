@@ -16,11 +16,9 @@ def buildRandomString(size):
 
 @app.route('/delete_file', methods=['POST'])
 def deleteFile():
-    print('endpoint')
     recvData = request.get_data().decode('utf-8')
     jsonData = json.loads(recvData)
     os.remove('/var/www/html/'+jsonData['url'].split('/')[-1])
-    print('deleted', jsonData['url'])
     return '{"status":"ok"}'
 
 

@@ -70,7 +70,6 @@ def auth():
     
     auth = Auth.query.filter_by(
         login=request.authorization.username).first()
-    print('login', auth.id)
     if auth == None:
         return {'status': 'user is not exist'}, 404
     if auth != None:
@@ -78,7 +77,6 @@ def auth():
         if check_password_hash(request.authorization.password, auth.password_hash):
             access_token = create_access_token(identity=auth.id, fresh=True)
             refresh_token = create_refresh_token(auth.id)
-            print(refresh_token)
             return (jsonify({
                 'id': auth.real_id,
                 'lifetime': app.config['TOKENS_LIFETIME'],
@@ -93,5 +91,4 @@ def auth():
 def refreshAccessToken():
     current_user = get_jwt_identity()
     new_token = create_access_token(identity=current_user, fresh=False)
-    print('token refresed')
     return {'access_token': new_token}, 200

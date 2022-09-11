@@ -56,7 +56,6 @@ def accrual_client_bonuses():
     client = Client.query.get(user_id)
     if client == None: return{},404
     client.bonuses += data['bonuses']
-    print('user id', user_id, 'bonuses', data['bonuses'])
     db.session.add(client)
     db.session.commit()
     return jsonify({"bonuses":client.bonuses})

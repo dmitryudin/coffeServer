@@ -14,7 +14,6 @@ def render_page_web():
 def return_flutter_doc(name):
 
     datalist = str(name).split('/')
-    print(datalist)
     DIR_NAME = FLUTTER_WEB_APP
 
     if len(datalist) > 1:
