@@ -50,6 +50,13 @@ def order_completed():
     db.session.commit()
     return {"status":"ok"}
 
+@app.route('/controllers/order_ready', methods=['GET'])
+def order_ready():
+    order_id = request.args.get('order_id')
+    order = Order.query.get(order_id)
+    order.is_ready = True
+    db.session.commit()
+    return {"status":"ok"}
 
 @app.route('/controllers/history_orders', methods=['GET'])
 def get_history_orders():
@@ -122,6 +129,7 @@ def create_order():
     order.positions = str(d['order'])
     order.client_id = userId
     order.is_active = True
+    order.is_ready = False
     order.is_accepted = False
     order.is_payd_for = False
     db.session.add(order)

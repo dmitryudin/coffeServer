@@ -55,7 +55,7 @@ def accrual_client_bonuses():
     user_id = data['user_id']
     client = Client.query.get(user_id)
     if client == None: return{},404
-    client.bonuses += data['bonuses']
+    client.bonuses += 1
     db.session.add(client)
     db.session.commit()
     return jsonify({"bonuses":client.bonuses})
@@ -67,15 +67,26 @@ def debiting_client_bonuses():
     user_id = data['user_id']
     client = Client.query.get(user_id)
     if client == None: return{}, 404
-    client.bonuses -= data['bonuses']
+    if client.bonuses>=8:
+        client.bonuses = 0
     db.session.add(client)
     db.session.commit()
     return jsonify({"bonuses":client.bonuses})
 
 
 @app.route('/controllers/client', methods=['PUT'])
+@jwt_required()
 def update_client():
-    pass
+    user_id = Auth.Auth.query.get(get_jwt_identity()).real_id
+    client = Client.query.get(user_id)
+    data = json.loads(request.get_data().decode('utf-8'))
+    client.firstName = data['name']
+    client.phone = data['phone']
+    client.email = data['email']
+    db.session.add(client)
+    db.session.commit()
+    return {"status":"success"}
+
 
 
 @app.route('/controllers/client', methods=['DELETE'])

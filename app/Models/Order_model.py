@@ -17,6 +17,7 @@ class Order(db.Model):
     is_active = db.Column(db.Boolean)
     is_payd_for = db.Column(db.Boolean)
     is_accepted = db.Column(db.Boolean)
+    is_ready = db.Column(db.Boolean)
     on_place = db.Column(db.Boolean)
     coffehouse_id = db.Column(db.Integer, db.ForeignKey('coffehouse.id'))
     client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
@@ -34,4 +35,5 @@ class Order(db.Model):
         myDict['user_id'] = self.user_id
         myDict['user_phone'] =  Client.query.get(self.user_id).phone
         myDict['on_place'] = self.on_place
+        yDict['in_ready'] = self.is_ready
         return (myDict)
