@@ -35,5 +35,5 @@ class Order(db.Model):
         myDict['user_id'] = self.user_id
         myDict['user_phone'] =  Client.query.get(self.user_id).phone
         myDict['on_place'] = self.on_place
-        yDict['in_ready'] = self.is_ready
+        myDict['is_ready'] = self.is_ready
         return (myDict)
