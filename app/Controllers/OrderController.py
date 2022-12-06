@@ -132,6 +132,7 @@ def create_order():
     order.is_ready = False
     order.is_accepted = False
     order.is_payd_for = False
+    print('order')
     db.session.add(order)
     db.session.commit()
     db.session.refresh(order)

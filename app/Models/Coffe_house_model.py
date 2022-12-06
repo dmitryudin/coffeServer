@@ -54,7 +54,9 @@ class Coffehouse(db.Model):
             if not (app.config['MEDIA_SERVER_ADDRESS']+'/'+photo in newlist):
                 path = '/var/www/html/'+str(photo).split('/')[-1]
                 if os.path.exists(path):
-                    os.remove(path)
+                    try:
+                        os.remove(path)
+                    except: pass
         for photo in self.photos:
             db.session.delete(photo)
         for photo in newlist:

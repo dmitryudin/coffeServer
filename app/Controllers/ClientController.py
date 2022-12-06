@@ -58,14 +58,17 @@ def accrual_client_bonuses():
     client.bonuses += 1
     db.session.add(client)
     db.session.commit()
+    print('bonuses', client.bonuses)
     return jsonify({"bonuses":client.bonuses})
 
 
 @app.route('/controllers/client_bonuses', methods=['DELETE'])
 def debiting_client_bonuses():
     data = json.loads(request.get_data().decode('utf-8'))
-    user_id = data['user_id']
-    client = Client.query.get(user_id)
+    phone = data['phone']
+    print (phone)
+    client = Client.query.filter_by(phone=phone).first()
+    print(client.bonuses)
     if client == None: return{}, 404
     if client.bonuses>=8:
         client.bonuses = 0
