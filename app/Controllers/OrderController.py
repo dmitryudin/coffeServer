@@ -39,6 +39,7 @@ def accept_order():
     order_id = request.args.get('order_id')
     order = Order.query.get(order_id)
     order.is_accepted = True
+    db.session.add(order)
     db.session.commit()
     return {"status":"ok"}
 
@@ -47,7 +48,9 @@ def order_completed():
     order_id = request.args.get('order_id')
     order = Order.query.get(order_id)
     order.is_active = False
+    db.session.add(order)
     db.session.commit()
+    print('order completed')
     return {"status":"ok"}
 
 @app.route('/controllers/order_ready', methods=['GET'])
@@ -55,6 +58,7 @@ def order_ready():
     order_id = request.args.get('order_id')
     order = Order.query.get(order_id)
     order.is_ready = True
+    db.session.add(order)
     db.session.commit()
     return {"status":"ok"}
 
@@ -127,6 +131,7 @@ def create_order():
     order.on_place = d['on_place']
     order.required_datetime = d['required_date_time']
     order.positions = str(d['order'])
+    print(str(d['order']))
     order.client_id = userId
     order.is_active = True
     order.is_ready = False
