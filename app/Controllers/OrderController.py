@@ -62,6 +62,16 @@ def order_ready():
     db.session.commit()
     return {"status":"ok"}
 
+
+@app.route('/controllers/order_alarmed', methods=['GET'])
+def order_alarmed():
+    order_id = request.args.get('order_id')
+    order = Order.query.get(order_id)
+    order.is_alarmed = True
+    db.session.add(order)
+    db.session.commit()
+    return {"status":"ok"}
+
 @app.route('/controllers/history_orders', methods=['GET'])
 def get_history_orders():
     orders = db.session.query(Order).filter_by(is_active=False).all()
@@ -142,7 +152,8 @@ def create_order():
     db.session.commit()
     db.session.refresh(order)
     try:
-        socketio.emit('message', 'dsfasdfasf', room=clients[-1])
+        for client in clients:
+            socketio.emit('message', 'dsfasdfasf', room=client)
     except: 
         pass
     return {"order_id":order.id}

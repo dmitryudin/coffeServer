@@ -19,6 +19,7 @@ class Auth(db.Model):
     login = db.Column(db.String(120), unique=True)
     role = db.Column(db.String(120))
     real_id = db.Column(db.Integer)
+    password_reset = db.Column(db.Integer)
     password_hash = db.Column(db.String(120))
 
 

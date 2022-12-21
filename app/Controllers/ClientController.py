@@ -12,6 +12,8 @@ from flask_jwt_extended import (
     create_access_token,
     create_refresh_token, jwt_required, get_jwt_identity)
 
+import smtplib
+from app.Controllers.RemoteFileManager import *
 @app.route('/controllers/client', methods=['POST'])
 @cross_origin()
 def create_client():
@@ -89,6 +91,27 @@ def update_client():
     db.session.add(client)
     db.session.commit()
     return {"status":"success"}
+
+@app.route('/controllers/password_reset', methods=['GET'])
+def reset_password():
+    login = request.args.get('login')
+    client = Client.query.filter_by(phone=login).first()
+    if client == None: 
+        return {"status": "Not found"}, 404
+    
+    randomString = buildRandomString(40)
+    
+    url='http://185.119.58.234:5050/controllers/new_password?reset_code='+randomString
+    print(url)
+
+
+    smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+    smtpObj.starttls()
+    smtpObj.login('yudinvasia1994@gmail.com','ozjiexonratyvlav')
+    smtpObj.sendmail("yudinvasia1994@gmail.com","eugeny.antipensky@yandex.ru",url)
+
+    print(client.email)
+    return {"status":"success"}, 200
 
 
 
