@@ -141,12 +141,12 @@ def create_order():
     order.on_place = d['on_place']
     order.required_datetime = d['required_date_time']
     order.positions = str(d['order'])
-    print(str(d['order']))
     order.client_id = userId
     order.is_active = True
     order.is_ready = False
     order.is_accepted = False
     order.is_payd_for = False
+    order.is_alarmed = False
     print('order')
     db.session.add(order)
     db.session.commit()
