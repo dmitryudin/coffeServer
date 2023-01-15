@@ -7,9 +7,9 @@ from datetime import timedelta
 app.config['CORS_HEADERS'] = 'Content-Type'
 # socketio = SocketIO(app)
 app.config['JWT_SECRET_KEY'] = 'this-is-super-secret'
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
-app.config['TOKENS_LIFETIME'] = 3000  # 5*60
+app.config['TOKENS_LIFETIME'] = 3600*12  # 5*60
 jwt = JWTManager(app)
 
 

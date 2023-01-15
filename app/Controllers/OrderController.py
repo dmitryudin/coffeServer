@@ -74,7 +74,7 @@ def order_alarmed():
 
 @app.route('/controllers/history_orders', methods=['GET'])
 def get_history_orders():
-    orders = db.session.query(Order).filter_by(is_active=False).all()
+    orders = db.session.query(Order).filter_by(is_active=False).order_by(Order.id.desc()).limit(5)
     mapped_active_order = list(map(lambda x: (x.toJson()), orders))
     return jsonify(mapped_active_order)
 
@@ -88,6 +88,9 @@ def get_active_orders():
 
 @app.route('/controllers/history_orders_by_user_id', methods=['GET'])
 def get_history_orders_by_user_id():
+    def sort_by_id(obj):
+        return obj['id']
+
     user_id = request.args.get('user_id')
     user = Client.query.get(user_id)
     orders = user.orders
@@ -96,6 +99,9 @@ def get_history_orders_by_user_id():
         if not order.is_active:
             history_orders.append(order)  
     mapped_history_order = list(map(lambda x: x.toJson(), history_orders))
+    if len(mapped_history_order)>6:
+        mapped_history_order = mapped_history_order[len(mapped_history_order)-6:len(mapped_history_order)-1]
+    mapped_history_order.sort(key=sort_by_id, reverse=True)
     return jsonify(mapped_history_order)
     return {}
 
