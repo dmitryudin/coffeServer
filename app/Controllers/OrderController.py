@@ -81,15 +81,17 @@ def get_history_orders():
 
 @app.route('/controllers/active_orders', methods=['GET'])
 def get_active_orders():
+    
     orders = db.session.query(Order).filter_by(is_active=True).all()
     mapped_active_order = list(map(lambda x: (x.toJson()), orders))
     return jsonify(mapped_active_order)
 
+def sort_by_id(obj):
+    return obj['id']
 
 @app.route('/controllers/history_orders_by_user_id', methods=['GET'])
 def get_history_orders_by_user_id():
-    def sort_by_id(obj):
-        return obj['id']
+    
 
     user_id = request.args.get('user_id')
     user = Client.query.get(user_id)
@@ -115,6 +117,7 @@ def get_orders_active_orders_by_user_id():
         if order.is_active:
             active_orders.append(order)  
     mapped_active_order = list(map(lambda x: x.toJson(), active_orders))
+    mapped_active_order.sort(key=sort_by_id, reverse=True)
     return jsonify(mapped_active_order)
   
 
